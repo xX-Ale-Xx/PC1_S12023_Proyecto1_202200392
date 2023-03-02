@@ -1,16 +1,19 @@
 
 package com.login;
 import com.admin.inicioAdmin;
+import com.adminClass.RegistroDep;
+import com.adminClass.RegistroKioscos;
+import com.adminClass.RegistroMuni;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import com.registro.panelRegistro;
 
 import  com.registro.RegistrarUsuarios;
+import com.user.inicioUser;
 
 public class login extends javax.swing.JFrame {
-     RegistrarUsuarios newRegis = new RegistrarUsuarios();
-    
-        private String usuario;
+    Listas newListas = new Listas();
+    private String usuario;
     private String contraseña;
 
     int xMouse, yMouse;
@@ -19,8 +22,8 @@ public class login extends javax.swing.JFrame {
         initComponents();
        
     }
- public void setListas(RegistrarUsuarios usuarios){
-        this.newRegis = usuarios;
+ public void setListas(Listas newListas){
+        this.newListas = newListas;
     }
     
     @SuppressWarnings("unchecked")
@@ -350,16 +353,26 @@ public class login extends javax.swing.JFrame {
             this.usuario=userTxt.getText();
             this.contraseña=String.valueOf(jPasswordField1.getPassword());
             
-           if(usuario.equals("j") && contraseña.equals("202200392")){
+           if(usuario.equals("ipc1_202200392@ipc1delivery.com") && contraseña.equals("202200392")){
                
         inicioAdmin newAdmin = new inicioAdmin();
-        
+        newAdmin.setListas(newListas);
+
+        newAdmin.setUsuarios(usuario, contraseña);
         newAdmin.setVisible(true);
         newAdmin.setLocation(50,50);
         
         this.dispose();
-           }else if(newRegis.buscarUsuario(usuario, contraseña)!=-1){
+           }else if(newListas.newRegis.buscarUsuario(usuario, contraseña)!=-1){
                mensaje("bienvenido");
+                inicioUser newUser = new inicioUser();
+        
+        newUser.setListas(newListas);
+        newUser.setUsuarios(usuario, contraseña);
+
+        newUser.setVisible(true);
+        newUser.setLocation(50,50);
+        this.dispose();
            }else{
                mensaje("Usuario/contraseña incorrectos");
            }
@@ -370,10 +383,10 @@ public class login extends javax.swing.JFrame {
     private void registroLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registroLabelMouseClicked
         // TODO add your handling code here:
         panelRegistro newRegistro = new panelRegistro();
-        
+        newRegistro.setListas(newListas);
         newRegistro.setVisible(true);
         newRegistro.setLocation(50,50);
-        newRegistro.setListas(newRegis);
+
         this.dispose();
         
     }//GEN-LAST:event_registroLabelMouseClicked

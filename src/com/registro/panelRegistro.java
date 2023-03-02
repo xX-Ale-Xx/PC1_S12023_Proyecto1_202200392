@@ -4,18 +4,24 @@
  */
 package com.registro;
 
+import com.adminClass.RegistroKioscos;
+import com.login.Listas;
 import static java.lang.Integer.parseInt;
 import java.awt.Color;
 import com.login.login;
+import java.awt.Image;
 
 
 
 import java.text.SimpleDateFormat;
-
 import javax.swing.ImageIcon;
+
+
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 /**
  *
  * @author Carol
@@ -24,8 +30,8 @@ public class panelRegistro extends javax.swing.JFrame {
     
     JFileChooser jf = new JFileChooser();
      
-    RegistrarUsuarios newRegis = new RegistrarUsuarios();
-    
+    Listas newListas;
+
    
     private String foto;
     private String correo;
@@ -50,8 +56,9 @@ int xMouse, yMouse;
      */
     public panelRegistro() {
         initComponents();
+        this.foto = "";
         
-        try {
+      /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -66,7 +73,7 @@ int xMouse, yMouse;
             java.util.logging.Logger.getLogger(panelRegistro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(panelRegistro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        }*/
         
     }
 
@@ -497,6 +504,11 @@ int xMouse, yMouse;
 
         kioskos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione..." }));
         kioskos.setEnabled(false);
+        kioskos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kioskosActionPerformed(evt);
+            }
+        });
 
         fechaNac.setBackground(new java.awt.Color(255, 255, 255));
         fechaNac.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
@@ -780,7 +792,7 @@ int xMouse, yMouse;
       
       newLogin.setVisible(true);
       newLogin.setLocation(50,50);
-       newLogin.setListas(newRegis);
+       newLogin.setListas(newListas);
         this.dispose();
     }//GEN-LAST:event_jLabel10MouseClicked
 
@@ -833,18 +845,8 @@ int xMouse, yMouse;
         
         
         
-       jf.setMultiSelectionEnabled(false);
-        if(jf.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){
-            
-          if( jf.getSelectedFile().getName().endsWith("jpg")||jf.getSelectedFile().getName().endsWith("png")){
-               rsdragdropfiles.RSDragDropFiles.setCopiar(jf.getSelectedFile().toString(), "src/com.img/perfilRegistro.png");
-
-            fotoPerfil.setIcon(new ImageIcon(jf.getSelectedFile().toString()));
-           }else{
-               mensaje("Archivo no compatible");
-           }
-        }
-      
+      this.foto = buscarImagen();
+        mostrarImagen(this.fotoPerfil, this.foto);
        
         
     }//GEN-LAST:event_subirBtnActionPerformed
@@ -861,7 +863,7 @@ int xMouse, yMouse;
                         login newLogin = new login();
                         newLogin.setVisible(true);
                         newLogin.setLocation(50, 50);
-                        newLogin.setListas(newRegis);
+                        newLogin.setListas(newListas);
                         this.dispose();
 
                     }
@@ -1000,6 +1002,10 @@ int xMouse, yMouse;
         }    
     }//GEN-LAST:event_telTxtKeyTyped
 
+    private void kioskosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kioskosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_kioskosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1009,22 +1015,7 @@ int xMouse, yMouse;
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(panelRegistro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(panelRegistro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(panelRegistro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(panelRegistro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+       
         //</editor-fold>
 
         /* Create and display the form */
@@ -1140,14 +1131,15 @@ int xMouse, yMouse;
        
     }
     
-    public void setListas(RegistrarUsuarios usuarios){
-        this.newRegis = usuarios;
+    public void setListas(Listas newListas){
+    this.newListas = newListas;
+    llenarKioscos();
     }
     
      private void registrar()
             
     {   
-        setListas(newRegis);
+      
         this.correo = this.correoTxt.getText();
         this.contraseña = String.valueOf(this.contraseñaJpass.getPassword());
         this.nombre = this.nombreTxt.getText();
@@ -1158,14 +1150,15 @@ int xMouse, yMouse;
         this.tel = parseInt(this.telTxt.getText());
         this.rolCuenta = String.valueOf(this.rol.getSelectedItem());
         this.kiosco = String.valueOf(this.kioskos.getSelectedItem());
-        this.foto = String.valueOf(fotoPerfil.getIcon());
+        
         this.nacion=String.valueOf(this.nacionalidad.getSelectedItem());
         this.generoPersona=String.valueOf(this.genero.getSelectedItem());
         int result=0;
+        if(foto.equals("")) foto = ".\\src\\com\\img\\perfilRegistro.png";
         if(rolCuenta.equals("Kiosco")){
-         result = this.newRegis.ReUsuarios(correo, contraseña, nombre, apellido, DpiTexto, sobreNombre, fecha, tel, rolCuenta, kiosco, nacion, generoPersona, foto);
+         result = this.newListas.getNewRegis().ReUsuarios(correo, contraseña, nombre, apellido, DpiTexto, sobreNombre, fecha, tel, rolCuenta, kiosco, nacion, generoPersona, foto);
         }else if(rolCuenta.equals("Usuario individual")){
-            result = this.newRegis.ReUsuarios(correo, contraseña, nombre, apellido, DpiTexto, sobreNombre, fecha, tel, rolCuenta, "Sin kiosco", nacion, generoPersona, foto);
+            result = this.newListas.getNewRegis().ReUsuarios(correo, contraseña, nombre, apellido, DpiTexto, sobreNombre, fecha, tel, rolCuenta, "Sin kiosco", nacion, generoPersona, foto);
         }
         switch (result) {
             case 1:
@@ -1175,6 +1168,35 @@ int xMouse, yMouse;
                 mensaje("El correo: "+correo+" ya existe");
                 break;
             
+        }
+    }
+     
+      private String buscarImagen(){
+        JFileChooser fc = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("jpg, jpeg, png", "jpg", "jpeg", "png");
+        fc.setFileFilter(filtro);
+        
+        int resp = fc.showOpenDialog(this);
+        if(resp==JFileChooser.APPROVE_OPTION){
+            return fc.getSelectedFile().getPath();            
+        }
+        return "";
+    }
+       private void mostrarImagen(JLabel cuadro, String ruta){
+    
+        if(!ruta.equals("")){
+            Image img = new ImageIcon(ruta).getImage();
+            img = img.getScaledInstance(135, 135   , Image.SCALE_SMOOTH);
+            ImageIcon imgI = new ImageIcon(img);
+            cuadro.setIcon(imgI);
+        }
+    }
+       
+       private void llenarKioscos(){
+        this.kioskos.removeAllItems();
+        int cantidad = this.newListas.getNewKioscos().cantidad();
+        for (int i = 0; i < cantidad; i++) {
+            this.kioskos.addItem(this.newListas.getNewKioscos().getCategoria(i).getNomKiosco());
         }
     }
 

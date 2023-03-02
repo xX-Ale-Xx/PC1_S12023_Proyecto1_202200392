@@ -4,18 +4,161 @@
  */
 package com.admin;
 
+
+
+import com.adminClass.kioscos;
+import com.login.Listas;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Carol
  */
 public class KioscoPanel extends javax.swing.JPanel {
+ 
+    Listas newListas;
+    private String CodKiosco;
+    private String NomKiosco;
+    private String CodRegion;
 
     /**
      * Creates new form KioscoPanel
      */
     public KioscoPanel() {
         initComponents();
+ 
     }
+    public void setListas(Listas newListas){
+        this.newListas = newListas;
+        llegarOpcionCategoria();
+              llenarTabla();
+              llenarKioscos();
+    }
+    private boolean camposLlenos() {
+        String msj = "";
+
+        this.CodKiosco = this.codKioscoText.getText();
+        this.NomKiosco = this.nombreKioscoText.getText();
+        this.CodRegion = this.codigoRegionesLista.getSelectedItem().toString();
+        
+       
+
+        if (CodKiosco.isEmpty())msj += "Codigo obligatorio\n";
+        
+        if (NomKiosco.isEmpty())msj += "Region obligatoria\n";
+        
+        if (CodKiosco.isEmpty())msj += "Nombre obligatorio\n";
+        
+        if (!msj.equals("")) {
+            mensaje(msj);
+            return false;
+        }
+        return true;
+    }
+    
+    
+    private boolean camposLlenos2() {
+        String msj = "";
+
+       
+       
+
+        if ( this.nombreActualizadoText.getText().isEmpty())msj += "Region obligatoria\n";
+        
+    
+        
+        if (!msj.equals("")) {
+            mensaje(msj);
+            return false;
+        }
+        return true;
+    }
+    
+    
+    private void mensaje(String mensaje){
+        JOptionPane.showMessageDialog(null, mensaje);
+    }
+    private void llegarOpcionCategoria(){
+        this.actualizarCodKioscoLista.removeAllItems();
+        int cantidad = this.newListas.getNewKioscos().cantidad();
+        for (int i = 0; i < cantidad; i++) {
+            this.actualizarCodKioscoLista.addItem(this.newListas.getNewKioscos().getCategoria(i).getCodKiosco());
+        }
+    }
+     public void registrar(){
+
+        int result=0;
+        result= this.newListas.getNewKioscos().ReKioscos(CodKiosco, NomKiosco, CodRegion);
+        switch (result) {
+            case 1:
+                mensaje("Kiosco Registrado");                
+                break;
+            case 2:
+                mensaje("El Kiosco con el codigo: "+CodKiosco+" ya existe");
+                break;
+            
+        }
+    }
+     
+      DefaultTableModel modelo;
+   private void llenarTabla(){
+        this.TablaKioscos.removeAll();
+        this.modelo = new DefaultTableModel();
+        modelo.addColumn("Codigo Kiosco");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Region");
+        
+       
+                
+        int cantidad = this.newListas.getNewKioscos().cantidad();
+        kioscos tmp;
+        for (int i = 0; i < cantidad; i++) {
+            tmp = this.newListas.getNewKioscos().getKiosco(i);
+            addRowTable(tmp.getCodKiosco(), tmp.getNomKiosco(), tmp.getCodRegion());
+        }
+        
+        this.TablaKioscos.setModel(modelo);
+       
+    }
+    
+    private void addRowTable(String codK, String nomK, String codR){
+        modelo.addRow(new Object[]{codK, nomK, codR});
+        this.TablaKioscos.setModel(modelo);
+    }
+    private void actualizar(){
+        if(this.CodKiosco!=null){
+            CodKiosco = this.actualizarCodKioscoLista.getSelectedItem().toString();
+            String nombreK = this.nombreActualizadoText.getText();
+            String codigoReg = this.actualizarRegionLista.getSelectedItem().toString();
+            
+            this.newListas.getNewKioscos().actualizar(CodKiosco, nombreK, codigoReg);
+            llenarTabla();
+            llenarKioscos();
+        }
+    }
+    
+    private void eliminarKiosco(){
+        
+        if(this.kioscos!=null){
+            String nombre =this.kioscos.getSelectedItem().toString();
+
+            this.newListas.getNewKioscos().eliminar(nombre);
+            
+            llegarOpcionCategoria();
+            llenarTabla();
+            llenarKioscos();
+        }
+    }
+    
+     private void llenarKioscos(){
+        this.kioscos.removeAllItems();
+        int cantidad = this.newListas.getNewKioscos().cantidad();
+        for (int i = 0; i < cantidad; i++) {
+            this.kioscos.addItem(this.newListas.getNewKioscos().getCategoria(i).getNomKiosco());
+        }
+    }
+ 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,18 +170,252 @@ public class KioscoPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TablaKioscos = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        codKioscoText = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        nombreKioscoText = new javax.swing.JTextField();
+        codigoRegionesLista = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        agregarKioscoBtn = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        actualizarCodKioscoLista = new javax.swing.JComboBox<>();
+        nombreActualizadoText = new javax.swing.JTextField();
+        actualizarRegionLista = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        actualizarKioscobtn = new javax.swing.JButton();
+        EliminarKBtn = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        kioscos = new javax.swing.JComboBox<>();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Manejo de Kioscos");
+
+        TablaKioscos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(TablaKioscos);
+
+        jLabel4.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Kioscos agregados:");
+
+        jLabel5.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("Agregar kiosco");
+
+        codKioscoText.setBackground(new java.awt.Color(255, 255, 255));
+        codKioscoText.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Codigo del Kiosco:");
+
+        jLabel2.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Nombre del Kiosco:");
+
+        nombreKioscoText.setBackground(new java.awt.Color(255, 255, 255));
+        nombreKioscoText.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+
+        codigoRegionesLista.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "NT", "NO", "SO", "SOC", "NOC" }));
+
+        jLabel6.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Codigo de la Region:");
+
+        agregarKioscoBtn.setBackground(new java.awt.Color(0, 0, 153));
+        agregarKioscoBtn.setFont(new java.awt.Font("Roboto", 1, 12)); // NOI18N
+        agregarKioscoBtn.setText("Agregar Kiosco");
+        agregarKioscoBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        agregarKioscoBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agregarKioscoBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Actualizar kiosco");
+
+        jLabel8.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("Codigo del Kiosco:");
+
+        actualizarCodKioscoLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarCodKioscoListaActionPerformed(evt);
+            }
+        });
+
+        nombreActualizadoText.setBackground(new java.awt.Color(255, 255, 255));
+        nombreActualizadoText.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+
+        actualizarRegionLista.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "NT", "NO", "SO", "SOC", "NOC" }));
+
+        jLabel9.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel9.setText("Nombre del Kiosco:");
+
+        jLabel10.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("Codigo de la Region:");
+
+        actualizarKioscobtn.setBackground(new java.awt.Color(0, 0, 153));
+        actualizarKioscobtn.setFont(new java.awt.Font("Roboto", 1, 12)); // NOI18N
+        actualizarKioscobtn.setText("Actualizar Kiosco");
+        actualizarKioscobtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        actualizarKioscobtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarKioscobtnActionPerformed(evt);
+            }
+        });
+
+        EliminarKBtn.setBackground(new java.awt.Color(255, 0, 0));
+        EliminarKBtn.setText("Eliminar");
+        EliminarKBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        EliminarKBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarKBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("Eliminar:");
+
+        kioscos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 843, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(codKioscoText, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel6))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(nombreKioscoText, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(codigoRegionesLista, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(agregarKioscoBtn)
+                            .addGap(67, 67, 67))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(kioscos, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel11))
+                            .addGap(11, 11, 11)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(74, 74, 74)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(actualizarRegionLista, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(94, 94, 94))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(106, 106, 106))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(actualizarKioscobtn)
+                                .addGap(116, 116, 116))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(EliminarKBtn)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel9))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(nombreActualizadoText, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(actualizarCodKioscoLista, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(45, 45, 45))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 440, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addGap(13, 13, 13)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(17, 17, 17))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(codKioscoText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel8)
+                            .addComponent(actualizarCodKioscoLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(nombreKioscoText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nombreActualizadoText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(codigoRegionesLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6)
+                            .addComponent(actualizarRegionLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(agregarKioscoBtn)
+                            .addComponent(actualizarKioscobtn))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(EliminarKBtn)
+                            .addComponent(kioscos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(57, 57, 57))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -53,8 +430,62 @@ public class KioscoPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void agregarKioscoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarKioscoBtnActionPerformed
+        // TODO add your handling code here:
+         if(camposLlenos()){
+            registrar();
+             llegarOpcionCategoria();
+             llenarTabla();
+             System.out.println(CodRegion+"");
+        }
+        
+    }//GEN-LAST:event_agregarKioscoBtnActionPerformed
+
+    private void actualizarKioscobtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarKioscobtnActionPerformed
+        // TODO add your handling code here:
+                if(camposLlenos2()){
+          actualizar();
+             llegarOpcionCategoria();
+             llenarTabla();
+                    mensaje("Kiosco actualizado");
+        }
+        
+    }//GEN-LAST:event_actualizarKioscobtnActionPerformed
+
+    private void actualizarCodKioscoListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarCodKioscoListaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_actualizarCodKioscoListaActionPerformed
+
+    private void EliminarKBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarKBtnActionPerformed
+        // TODO add your handling code here:
+        eliminarKiosco();
+    }//GEN-LAST:event_EliminarKBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton EliminarKBtn;
+    private javax.swing.JTable TablaKioscos;
+    private javax.swing.JComboBox<String> actualizarCodKioscoLista;
+    private javax.swing.JButton actualizarKioscobtn;
+    private javax.swing.JComboBox<String> actualizarRegionLista;
+    private javax.swing.JButton agregarKioscoBtn;
+    private javax.swing.JTextField codKioscoText;
+    private javax.swing.JComboBox<String> codigoRegionesLista;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox<String> kioscos;
+    private javax.swing.JTextField nombreActualizadoText;
+    private javax.swing.JTextField nombreKioscoText;
     // End of variables declaration//GEN-END:variables
 }

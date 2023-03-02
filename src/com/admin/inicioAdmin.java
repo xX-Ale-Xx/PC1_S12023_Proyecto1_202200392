@@ -4,6 +4,13 @@
  */
 package com.admin;
 
+import com.adminClass.RegistroDep;
+import com.adminClass.RegistroKioscos;
+import com.adminClass.RegistroMuni;
+import com.login.Listas;
+import com.login.login;
+import com.registro.RegistrarUsuarios;
+
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,20 +24,72 @@ import java.util.Locale;
  * @author Carol
  */
 public class inicioAdmin extends javax.swing.JFrame {
+  Listas newListas;
+    
 
+
+
+ PerfilJpanel perfilP =new PerfilJpanel();
+ KioscoPanel kioscoP = new KioscoPanel();
+ DepartamentosPanel DepaP = new DepartamentosPanel();
+ PreciosPanel PreciosP = new PreciosPanel();
+ ReportesPanel ReporteP = new ReportesPanel();
+ 
     /**
      * Creates new form inicioAdmin
      */
+
+
+    private String foto;
+    private String correo;
+    private String contraseña;
+    private String nombre;
+    private String apellido;
+    private String DpiTexto;
+    private String sobreNombre;
+    private String fecha;
+    private String generoPersona;
+    private String nacion;
+    private int telefono;
+    private String rolCuenta;
+    private String kiosco;
+
+
+
     public inicioAdmin() {
         initComponents();
         setDate();
-        initContent();
+        
         perfilBtn.setForeground(Color.WHITE);
         kioscoBtn.setForeground(Color.WHITE);
         preciosBtn.setForeground(Color.WHITE);
         reporteBtn.setForeground(Color.WHITE);
         departamentosBtn.setForeground(Color.WHITE);
+        
     }
+
+    public void setUsuarios(String correo, String contraseña){
+      this.correo = correo;
+      this.contraseña = contraseña;
+      actualizarUsuarios();
+    }
+   public void setListas(Listas newListas ){
+        this.newListas = newListas;
+          ReportesJPanel();
+      KioscoJPanel();
+      PreciosJPanel();
+      DepartamentosJPanel();
+        initContent();
+      
+    }
+   public void actualizarUsuarios(){
+        perfilP.setListas(newListas,correo, contraseña);
+     
+
+   }
+   //***************************************************
+    
+   //***************************************************
     
 
     /**
@@ -50,6 +109,7 @@ public class inicioAdmin extends javax.swing.JFrame {
         departamentosBtn = new javax.swing.JButton();
         reporteBtn = new javax.swing.JButton();
         perfilBtn = new javax.swing.JButton();
+        CerrarSesionBtn = new javax.swing.JButton();
         header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         dateText = new javax.swing.JLabel();
@@ -184,6 +244,25 @@ public class inicioAdmin extends javax.swing.JFrame {
             }
         });
 
+        CerrarSesionBtn.setBackground(new java.awt.Color(204, 0, 0));
+        CerrarSesionBtn.setFont(new java.awt.Font("Roboto", 1, 12)); // NOI18N
+        CerrarSesionBtn.setForeground(new java.awt.Color(0, 0, 0));
+        CerrarSesionBtn.setText("Cerrar sesión ");
+        CerrarSesionBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CerrarSesionBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                CerrarSesionBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                CerrarSesionBtnMouseExited(evt);
+            }
+        });
+        CerrarSesionBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CerrarSesionBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout menuLayout = new javax.swing.GroupLayout(menu);
         menu.setLayout(menuLayout);
         menuLayout.setHorizontalGroup(
@@ -192,11 +271,15 @@ public class inicioAdmin extends javax.swing.JFrame {
             .addComponent(departamentosBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(reporteBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(kioscoBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(perfilBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(menuLayout.createSequentialGroup()
                 .addGap(54, 54, 54)
                 .addComponent(jLabel3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(perfilBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(CerrarSesionBtn)
+                .addGap(66, 66, 66))
         );
         menuLayout.setVerticalGroup(
             menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,7 +288,7 @@ public class inicioAdmin extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(30, 30, 30)
                 .addComponent(perfilBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addComponent(kioscoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(preciosBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -213,7 +296,9 @@ public class inicioAdmin extends javax.swing.JFrame {
                 .addComponent(departamentosBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(reporteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(CerrarSesionBtn)
+                .addGap(27, 27, 27))
         );
 
         header.setBackground(new java.awt.Color(51, 51, 255));
@@ -298,7 +383,8 @@ public class inicioAdmin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void kioscoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kioscoBtnActionPerformed
-      showJpanel(new KioscoPanel());
+  KioscoJPanel();
+        
     }//GEN-LAST:event_kioscoBtnActionPerformed
 
     private void kioscoBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kioscoBtnMouseEntered
@@ -344,7 +430,10 @@ public class inicioAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_reporteBtnMouseExited
 
     private void perfilBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_perfilBtnActionPerformed
- showJpanel(new PerfilJpanel());
+
+
+ initContent();
+ 
     }//GEN-LAST:event_perfilBtnActionPerformed
 
     private void perfilBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_perfilBtnMouseEntered
@@ -360,49 +449,50 @@ public class inicioAdmin extends javax.swing.JFrame {
 
     private void departamentosBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departamentosBtnActionPerformed
         // TODO add your handling code here:
-        showJpanel(new DepartamentosPanel());
+        
+        DepartamentosJPanel();
+        
     }//GEN-LAST:event_departamentosBtnActionPerformed
 
     private void preciosBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preciosBtnActionPerformed
         // TODO add your handling code here:
         
-        showJpanel(new PreciosPanel());
+      PreciosJPanel();
         
     }//GEN-LAST:event_preciosBtnActionPerformed
 
     private void reporteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteBtnActionPerformed
         // TODO add your handling code here:
-        showJpanel(new ReportesPanel());
+  ReportesJPanel();
     }//GEN-LAST:event_reporteBtnActionPerformed
+
+    private void CerrarSesionBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CerrarSesionBtnMouseEntered
+        // TODO add your handling code here:
+        this.CerrarSesionBtn.setForeground(Color.WHITE);
+    }//GEN-LAST:event_CerrarSesionBtnMouseEntered
+
+    private void CerrarSesionBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CerrarSesionBtnMouseExited
+        // TODO add your handling code here:
+        this.CerrarSesionBtn.setForeground(Color.BLACK);
+    }//GEN-LAST:event_CerrarSesionBtnMouseExited
+
+    private void CerrarSesionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarSesionBtnActionPerformed
+        // TODO add your handling code here:
+        login newLogin = new login();
+
+        newLogin.setVisible(true);
+        newLogin.setLocation(50,50);
+        newLogin.setListas(newListas);
+        this.dispose();
+
+    }//GEN-LAST:event_CerrarSesionBtnActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(inicioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(inicioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(inicioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(inicioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new inicioAdmin().setVisible(true);
@@ -424,11 +514,78 @@ public class inicioAdmin extends javax.swing.JFrame {
 }
     private void initContent(){
 
-        showJpanel(new PerfilJpanel());
+ 
+ perfilP.setListas(newListas, correo, contraseña);
+
+  perfilP.setSize(843,440);
+  
+        perfilP.setLocation(0,0);
+        
+        content.removeAll();
+        content.add(perfilP, BorderLayout.CENTER);
+        content.revalidate();
+        content.repaint();
+        
     }
     
+    
+    private void KioscoJPanel(){
+           kioscoP.setListas(newListas);
+
+  kioscoP.setSize(843,440);
+  
+        kioscoP.setLocation(0,0);
+        
+        content.removeAll();
+        content.add(kioscoP, BorderLayout.CENTER);
+        content.revalidate();
+        content.repaint();
+    }
+    
+     private void PreciosJPanel(){
+           PreciosP.setListas(newListas);
+
+        PreciosP.setSize(843,440);
+  
+        PreciosP.setLocation(0,0);
+        
+        content.removeAll();
+        content.add(PreciosP, BorderLayout.CENTER);
+        content.revalidate();
+        content.repaint();
+    }
+     
+     private void DepartamentosJPanel(){
+          DepaP.setListas(newListas);
+ 
+  DepaP.setSize(843,500);
+  
+        DepaP.setLocation(0,0);
+        
+        content.removeAll();
+        content.add(DepaP, BorderLayout.CENTER);
+        content.revalidate();
+        content.repaint();
+        
+     }
+      private void ReportesJPanel(){
+          ReporteP.setListas(newListas);
+ 
+  ReporteP.setSize(843,440);
+  
+        ReporteP.setLocation(0,0);
+        
+        content.removeAll();
+        content.add(ReporteP, BorderLayout.CENTER);
+        content.revalidate();
+        content.repaint();
+        
+     }
+     
+    
+    
     private void showJpanel(JPanel p){
-        p.setSize(843,440);
+        p.setSize(843,460);
         p.setLocation(0,0);
         
         content.removeAll();
@@ -438,6 +595,7 @@ public class inicioAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton CerrarSesionBtn;
     private javax.swing.JPanel content;
     private javax.swing.JLabel dateText;
     private javax.swing.JButton departamentosBtn;

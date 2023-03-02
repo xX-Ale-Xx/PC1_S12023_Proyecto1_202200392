@@ -4,19 +4,107 @@
  */
 package com.admin;
 
+
+
+import com.login.Listas;
+
 /**
  *
  * @author Carol
  */
 public class ReportesPanel extends javax.swing.JPanel {
 
+Listas newListas;
     /**
      * Creates new form Kioscos
      */
     public ReportesPanel() {
         initComponents();
+        
     }
+     public void setListas(Listas newListas){
+        this.newListas = newListas;
+       colocarTotalIngresos();
+       colocarTotalPaquetes();
+      
+    }
+     
+     private void colocarTotalIngresos(){
+         double total = newListas.getNewCotizacion().TotalIngresos();
+         this.ToIngresosLabel.setText("Q "+String.valueOf(total));
+     }
+     
+     private void colocarTotalPaquetes(){
+         int total = newListas.getNewCotizacion().TotalPaquetes();
+         this.TotalPaquetesLabel.setText(String.valueOf(total));
+     }
+     
+     
+     
+     
+     
+    
+     /*public  void pp(){
+         GuardarListaRegiones();
+          int cantidad = this.newListas.getNewListaNumRegiones().cantidad();
+          int contar;
+          numRegiones tmp;
+          for(int i = 0; i< cantidad; i++){ 
+            contar=0;
+            tmp = this.newListas.getNewListaNumRegiones().getCategoria(i);
+             
+                 
+            for ( int j = 0; j < cantidad; j++) {
+                
+                
+                if(tmp.getRegion().equals(this.newListas.getNewListaNumRegiones().getCategoria(j).getRegion())){
+                    
+           
+         contar += 1;
+         break;
+         
+         
+                }
 
+             
+            }
+           
+            reporte[i][0]=tmp.getRegion();
+            reporte[i][1]=String.valueOf(contar);
+              
+        
+        }
+      }
+     
+       public  void ordenar(String arreglo[][]) {
+           pp();
+         for (int i = 0; i < reporte.length; i++) {
+             if(String.valueOf(reporte[i][0]) != null){
+                 
+             for (int j = 0; j < reporte.length-1; j++) {
+                 if(Integer.parseInt(reporte[j][1])<Integer.parseInt(reporte[j+1][1])){
+                     String aux2;
+                     aux2=reporte[j][0];
+                     reporte[j][0]=reporte[j+1][0];
+                     reporte[j+1][0]=aux2;
+                     String aux;
+                     aux=reporte[j][1];
+                     reporte[j][1]=reporte[j+1][1];
+                     reporte[j+1][1]=aux;
+                     
+                     
+                     
+                 }
+                 
+                     
+                 
+             }
+         }
+    }
+        
+         
+  }*/
+      
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,18 +115,80 @@ public class ReportesPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        ToIngresosLabel = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        TotalPaquetesLabel = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Reporte");
+
+        jLabel6.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Total de ingresos:");
+
+        ToIngresosLabel.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        ToIngresosLabel.setForeground(new java.awt.Color(0, 0, 0));
+        ToIngresosLabel.setText("jLabel1");
+
+        jLabel7.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Total de Paquetes");
+
+        TotalPaquetesLabel.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        TotalPaquetesLabel.setForeground(new java.awt.Color(0, 0, 0));
+        TotalPaquetesLabel.setText("jLabel1");
+
+        jLabel8.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("enviados:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 843, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 843, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(212, 212, 212)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(ToIngresosLabel))
+                    .addComponent(jLabel6))
+                .addGap(146, 146, 146)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(TotalPaquetesLabel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 440, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addGap(107, 107, 107)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(ToIngresosLabel)))
+                .addGap(18, 18, 18)
+                .addComponent(TotalPaquetesLabel)
+                .addContainerGap(209, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -55,6 +205,12 @@ public class ReportesPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel ToIngresosLabel;
+    private javax.swing.JLabel TotalPaquetesLabel;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

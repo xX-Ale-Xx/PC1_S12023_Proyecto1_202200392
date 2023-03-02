@@ -7,6 +7,7 @@ import com.adminClass.RegistroDep;
 import com.adminClass.RegistroMuni;
 import com.adminClass.departamentos;
 import com.adminClass.municipios;
+import com.login.Listas;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -15,9 +16,9 @@ import javax.swing.table.DefaultTableModel;
  * @author Carol
  */
 public class DepartamentosPanel extends javax.swing.JPanel {
-    RegistroDep NewDep = new RegistroDep();
-    RegistroMuni NewMuni = new RegistroMuni();
     
+    Listas newListas;
+
     private String CodDepa;
     private String Region;
     private String nomDepa;
@@ -35,25 +36,25 @@ public class DepartamentosPanel extends javax.swing.JPanel {
      */
     public DepartamentosPanel() {
         initComponents();
-        llegarOpcionCategoria();
-        llenarTabla();
-        llenarTablaMuni();
+
+       
         MuniBtn.setForeground(Color.WHITE);
         DepBtn.setForeground(Color.WHITE);
     }
     
-    public void setListas(RegistroDep usuarios){
-        this.NewDep = usuarios;
+    public void setListas(Listas newListas){
+        this.newListas = newListas;
         llegarOpcionCategoria();
+         llenarTabla();
+         llenarTablaMuni();
+
     }
-     public void setListas2(RegistroMuni usuarios){
-        this.NewMuni = usuarios;
-    }
+ 
     
     public void registrar(){
-        setListas(NewDep);
+     
         int result=0;
-        result= this.NewDep.ReDep(CodDepa,Region ,nomDepa );
+        result= this.newListas.getNewDep().ReDep(CodDepa,Region ,nomDepa );
         switch (result) {
             case 1:
                 mensaje("Departamento Registrado");                
@@ -115,9 +116,9 @@ private void mensaje(String mensaje){
   
   
    public void registrarMuni(){
-        setListas2(NewMuni);
+     
         int result=0;
-        result= this.NewMuni.ReMuni(CodDepartamento,CodMuni ,nomMuni );
+        result= this.newListas.getNewMuni().ReMuni(CodDepartamento,CodMuni ,nomMuni );
         switch (result) {
             case 1:
                 mensaje("Departamento Registrado");                
@@ -135,9 +136,9 @@ private void mensaje(String mensaje){
 
   private void llegarOpcionCategoria(){
         this.listaDepartamentos.removeAllItems();
-        int cantidad = this.NewDep.cantidad();
+        int cantidad = this.newListas.getNewDep().cantidad();
         for (int i = 0; i < cantidad; i++) {
-            this.listaDepartamentos.addItem(this.NewDep.getCategoria(i).getCodigoDep());
+            this.listaDepartamentos.addItem(this.newListas.getNewDep().getCategoria(i).getCodigoDep());
         }
     }
   
@@ -151,10 +152,10 @@ private void mensaje(String mensaje){
         
        
                 
-        int cantidad = this.NewDep.cantidad();
+        int cantidad = this.newListas.getNewDep().cantidad();
         departamentos tmp;
         for (int i = 0; i < cantidad; i++) {
-            tmp = this.NewDep.getDepartamento(i);
+            tmp = this.newListas.getNewDep().getDepartamento(i);
             addRowTable(tmp.getCodigoDep(), tmp.getRegionDep(), tmp.getNombreDep());
         }
         
@@ -178,10 +179,10 @@ private void mensaje(String mensaje){
         
        
                 
-        int cantidad = this.NewMuni.cantidad();
+        int cantidad = this.newListas.getNewMuni().cantidad();
         municipios tmp;
         for (int i = 0; i < cantidad; i++) {
-            tmp = this.NewMuni.getMunicipio(i);
+            tmp = this.newListas.getNewMuni().getMunicipio(i);
             addRowTable2(tmp.getCodigoDep(), tmp.getCodigoReg(), tmp.getNombre());
         }
         
@@ -194,6 +195,51 @@ private void mensaje(String mensaje){
         this.TablaMuni.setModel(modelo);
     }
     
+private void actualizarDepa(){
+        if(this.CodDepa!=null){
+            CodDepa = this.CodRegionAgregar.getText();
+            String region = this.RegionAgregar.getSelectedItem().toString();
+            String nombre = this.NomRegionAgregar.getText();
+            
+            this.newListas.getNewDep().actualizar(CodDepa, region, nombre);
+            llenarTabla();
+        }
+    }
+
+
+private void actualizarMuni(){
+        if(this.CodMuni!=null){
+            CodMuni = this.CodMunicipioAgregar.getText();
+            String Cod = this.listaDepartamentos.getSelectedItem().toString();
+            String nombre = this.NomMunicipioAgregar.getText();
+            
+            this.newListas.getNewMuni().actualizar(Cod,CodMuni, nombre);
+            llenarTablaMuni();
+        }
+    }
+ private void eliminarMuni(){
+        
+        if(this.NomMunicipioAgregar!=null){
+            String nombre =this.NomMunicipioAgregar.getText();
+
+            this.newListas.getNewMuni().eliminar(nombre);
+            System.out.println("eliminar Municipio");
+            llenarTablaMuni();
+        }
+    }
+ 
+ private void eliminarDep(){
+        
+        if(this.CodMunicipioAgregar!=null){
+            String nombre =this.CodMunicipioAgregar.getText();
+
+            this.newListas.getNewDep().eliminar(nombre);
+            System.out.println("eliminar Departamento");
+            llegarOpcionCategoria();
+            llenarTabla();
+        }
+    }
+ 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -223,6 +269,10 @@ private void mensaje(String mensaje){
         jLabel10 = new javax.swing.JLabel();
         listaDepartamentos = new javax.swing.JComboBox<>();
         RegionAgregar = new javax.swing.JComboBox<>();
+        ActualizarDepBtn = new javax.swing.JButton();
+        ActualizarMuniBtn = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        EliminarDepBtn = new javax.swing.JButton();
         verPanel = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -321,6 +371,42 @@ private void mensaje(String mensaje){
 
         RegionAgregar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "NT", "NO", "SO", "SOC", "NOC" }));
 
+        ActualizarDepBtn.setBackground(new java.awt.Color(0, 0, 204));
+        ActualizarDepBtn.setText("Actualizar");
+        ActualizarDepBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ActualizarDepBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ActualizarDepBtnActionPerformed(evt);
+            }
+        });
+
+        ActualizarMuniBtn.setBackground(new java.awt.Color(0, 0, 204));
+        ActualizarMuniBtn.setText("Actualizar");
+        ActualizarMuniBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ActualizarMuniBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ActualizarMuniBtnActionPerformed(evt);
+            }
+        });
+
+        jButton1.setBackground(new java.awt.Color(255, 0, 0));
+        jButton1.setText("Eliminar");
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        EliminarDepBtn.setBackground(new java.awt.Color(255, 0, 0));
+        EliminarDepBtn.setText("Eliminar");
+        EliminarDepBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        EliminarDepBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarDepBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout AgregarPanelLayout = new javax.swing.GroupLayout(AgregarPanel);
         AgregarPanel.setLayout(AgregarPanelLayout);
         AgregarPanelLayout.setHorizontalGroup(
@@ -361,12 +447,21 @@ private void mensaje(String mensaje){
                                     .addGroup(AgregarPanelLayout.createSequentialGroup()
                                         .addComponent(RegionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(DepBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(AgregarPanelLayout.createSequentialGroup()
-                        .addGap(131, 131, 131)
-                        .addComponent(MuniBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(48, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(AgregarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(DepBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ActualizarDepBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(EliminarDepBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(AgregarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(AgregarPanelLayout.createSequentialGroup()
+                            .addGap(102, 102, 102)
+                            .addComponent(MuniBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ActualizarMuniBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(AgregarPanelLayout.createSequentialGroup()
+                            .addGap(219, 219, 219)
+                            .addComponent(jButton1))))
+                .addContainerGap(36, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AgregarPanelLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel3)
@@ -381,10 +476,12 @@ private void mensaje(String mensaje){
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(AgregarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(CodRegionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(AgregarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(AgregarPanelLayout.createSequentialGroup()
+                        .addGroup(AgregarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addGroup(AgregarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(CodRegionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(EliminarDepBtn)))
                         .addGap(15, 15, 15)
                         .addGroup(AgregarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
@@ -392,12 +489,13 @@ private void mensaje(String mensaje){
                         .addGap(17, 17, 17)
                         .addGroup(AgregarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(NomRegionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(31, 31, 31))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AgregarPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(NomRegionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(AgregarPanelLayout.createSequentialGroup()
+                        .addGap(34, 34, 34)
                         .addComponent(DepBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ActualizarDepBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(31, 31, 31)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(AgregarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -411,9 +509,13 @@ private void mensaje(String mensaje){
                 .addGroup(AgregarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(NomMunicipioAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(AgregarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(MuniBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ActualizarMuniBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(MuniBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addComponent(jButton1)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         verPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -558,18 +660,56 @@ private void mensaje(String mensaje){
         }
     }//GEN-LAST:event_MuniBtnActionPerformed
 
+    private void ActualizarDepBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarDepBtnActionPerformed
+        // TODO add your handling code here:
+        
+        if(camposLlenos()){
+          actualizarDepa();
+             llegarOpcionCategoria();
+             llenarTabla();
+        }
+        
+    }//GEN-LAST:event_ActualizarDepBtnActionPerformed
+
+    private void ActualizarMuniBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarMuniBtnActionPerformed
+        // TODO add your handling code here:
+        if(camposLlenosMuni()){
+            actualizarMuni();
+             llegarOpcionCategoria();
+             llenarTablaMuni();
+        }
+    }//GEN-LAST:event_ActualizarMuniBtnActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if(camposLlenosMuni()){
+        eliminarMuni();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void EliminarDepBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarDepBtnActionPerformed
+        // TODO add your handling code here:
+       if(camposLlenos()){
+        eliminarDep();
+       }
+    }//GEN-LAST:event_EliminarDepBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ActualizarDepBtn;
+    private javax.swing.JButton ActualizarMuniBtn;
     private javax.swing.JPanel AgregarPanel;
     private javax.swing.JTextField CodMunicipioAgregar;
     private javax.swing.JTextField CodRegionAgregar;
     private javax.swing.JButton DepBtn;
+    private javax.swing.JButton EliminarDepBtn;
     private javax.swing.JButton MuniBtn;
     private javax.swing.JTextField NomMunicipioAgregar;
     private javax.swing.JTextField NomRegionAgregar;
     private javax.swing.JComboBox<String> RegionAgregar;
     private javax.swing.JTable TablaDep;
     private javax.swing.JTable TablaMuni;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

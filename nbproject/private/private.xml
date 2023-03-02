@@ -4,11 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Carol/Desktop/proyectos%20java/Login/src/com/login/login.java</file>
-            <file>file:/C:/Users/Carol/Desktop/proyectos%20java/Login/src/com/admin/inicioAdmin.java</file>
-            <file>file:/C:/Users/Carol/Desktop/proyectos%20java/Login/src/com/admin/DepartamentosPanel.java</file>
+            <file>file:/C:/Users/Carol/Desktop/proyectos%20java/Login/src/com/user/inicioUser.java</file>
+            <file>file:/C:/Users/Carol/Desktop/proyectos%20java/Login/src/com/userClass/CotizacionHTML.java</file>
             <file>file:/C:/Users/Carol/Desktop/proyectos%20java/Login/src/com/registro/panelRegistro.java</file>
-            <file>file:/C:/Users/Carol/Desktop/proyectos%20java/Login/src/com/adminClass/RegistroMuni.java</file>
-            <file>file:/C:/Users/Carol/Desktop/proyectos%20java/Login/src/com/adminClass/municipios.java</file>
+            <file>file:/C:/Users/Carol/Desktop/proyectos%20java/Login/src/com/user/CotizacionPanel.java</file>
         </group>
     </open-files>
 </project-private>
