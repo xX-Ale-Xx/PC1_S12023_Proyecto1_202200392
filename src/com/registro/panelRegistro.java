@@ -860,11 +860,6 @@ int xMouse, yMouse;
                     if (isDpi()) {
 
                         registrar();
-                        login newLogin = new login();
-                        newLogin.setVisible(true);
-                        newLogin.setLocation(50, 50);
-                        newLogin.setListas(newListas);
-                        this.dispose();
 
                     }
 
@@ -876,6 +871,14 @@ int xMouse, yMouse;
 
     }//GEN-LAST:event_registroLabelMouseClicked
 
+    private void GenerarLog(){
+        login newLogin = new login();
+                        newLogin.setVisible(true);
+                        newLogin.setLocation(50, 50);
+                        newLogin.setListas(newListas);
+                        this.dispose();
+    }
+    
     private void registroLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registroLabelMouseEntered
         registroBtn.setBackground(Color.black);
         registroLabel.setForeground(Color.white);
@@ -1162,10 +1165,14 @@ int xMouse, yMouse;
         }
         switch (result) {
             case 1:
-                mensaje("Registrado");                
+                mensaje("Registrado"); 
+                GenerarLog();
                 break;
             case 2:
                 mensaje("El correo: "+correo+" ya existe");
+                break;
+            case 3:
+                mensaje("La contraseña ya existe");
                 break;
             
         }

@@ -364,8 +364,12 @@ public class login extends javax.swing.JFrame {
         
         this.dispose();
            }else if(newListas.newRegis.buscarUsuario(usuario, contraseña)!=-1){
-               mensaje("bienvenido");
-                inicioUser newUser = new inicioUser();
+       
+               switch (newListas.newRegis.buscarUsuario(usuario, contraseña)) {
+                   case 4: 
+                        mensaje("bienvenido");
+        
+        inicioUser newUser = new inicioUser();
         
         newUser.setListas(newListas);
         newUser.setUsuarios(usuario, contraseña);
@@ -373,8 +377,16 @@ public class login extends javax.swing.JFrame {
         newUser.setVisible(true);
         newUser.setLocation(50,50);
         this.dispose();
+                       break;
+                       
+                   case 2: mensaje("Contraseña incorrecta"); break;
+                   case 3: mensaje("Usuario incorrecto"); break;
+                   default:
+                       throw new AssertionError();
+               }
+              
            }else{
-               mensaje("Usuario/contraseña incorrectos");
+               mensaje("El usuario no existe");
            }
         }
                      

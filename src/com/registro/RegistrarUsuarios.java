@@ -23,8 +23,10 @@ public class RegistrarUsuarios {
      
      public int ReUsuarios(String correo, String contraseña, String nombre, String apellido, String DPI, String alias, String fechaNac, int telefono, String rol, String kiosco, String nacionalidad, String genero, String foto)
     {
+        int indice2 = existeContra(contraseña);
         int indice = existeUsuario(correo);
         if(indice!=-1) return 2;
+        else if(indice2!=-1)return 3;
         
         this.listUsuarios.add(new Usuarios(correo, contraseña, nombre, apellido, DPI, alias, fechaNac, telefono, rol, kiosco, nacionalidad, genero, foto));
         
@@ -41,6 +43,17 @@ public class RegistrarUsuarios {
         }
         return -1;
     }
+      public int existeContra(String correo)
+    {
+        int cantidad = this.listUsuarios.size();
+        Usuarios tmp;
+        
+        for (int i = 0; i <cantidad ; i++) {
+            tmp = this.listUsuarios.get(i);
+            if(tmp.getContraseña().equals(correo)) return i;
+        }
+        return -1;
+    }
       
       
       public int buscarUsuario(String correo, String contraseña)
@@ -50,7 +63,9 @@ public class RegistrarUsuarios {
         
         for (int i = 0; i <cantidad ; i++) {
             tmp = this.listUsuarios.get(i);
-            if(tmp.getCorreo().equals(correo) && tmp.getContraseña().equals(contraseña)) return i;
+            if(tmp.getCorreo().equals(correo) && !tmp.getContraseña().equals(contraseña)) return 2;
+            if(!tmp.getCorreo().equals(correo) && tmp.getContraseña().equals(contraseña)) return 3;
+            if(tmp.getCorreo().equals(correo) && tmp.getContraseña().equals(contraseña)) return 4;
         }
         return -1;
     }
